@@ -49,7 +49,7 @@ class MyTabBloc extends Bloc<MyTabEvent, MyTabState> {
       //     return;
       case SelectedTab.tab:
         try {
-          final posts = await _repository.childWidgetData();
+          final posts = await _repository.fetchData('?row=0', SelectedTab.tab);
           print(
               'from _onEventSelectedTabChanged '
               'SelectedTab.tab: ${event.status}');
@@ -66,7 +66,8 @@ class MyTabBloc extends Bloc<MyTabEvent, MyTabState> {
         }
       case SelectedTab.secondTab:
         try {
-          final posts = await _repository.childWidgetTwoData();
+          final posts = await _repository.fetchData('?row=1', 
+          SelectedTab.secondTab);
           print(
               'from _onEventSelectedTabChanged SelectedTab.secondTab: $posts');
           await _tabStatusSubscription.cancel();
@@ -78,7 +79,8 @@ class MyTabBloc extends Bloc<MyTabEvent, MyTabState> {
         }
       case SelectedTab.thirdTab:
         try {
-          final posts = await _repository.childWidgetThreeData();
+          final posts = await _repository.fetchData('?row=2', 
+          SelectedTab.thirdTab);
           print('from _onEventSelectedTabChanged SelectedTab.thirdTab: $posts');
           await _tabStatusSubscription.cancel();
           return (emitter(MyTabState.thirdTab(posts)));
@@ -89,7 +91,8 @@ class MyTabBloc extends Bloc<MyTabEvent, MyTabState> {
         }
       case SelectedTab.fourthTab:
         try {
-          final posts = await _repository.childWidgetFourData();
+          final posts = await _repository.fetchData('?row=3', 
+          SelectedTab.fourthTab);
           print(
               'from _onEventSelectedTabChanged SelectedTab.fourthTab: $posts');
           await _tabStatusSubscription.cancel();
