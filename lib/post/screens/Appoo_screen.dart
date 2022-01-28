@@ -97,10 +97,18 @@ class _MyAppooViewState extends State<MyAppooView>
         ),
         body: TabBarView(controller: _controller, children: [
           //TODO enhance!
+   /*       buildPageController(_selectedIndex, repository, context),
           buildPageController(_selectedIndex, repository, context),
           buildPageController(_selectedIndex, repository, context),
-          buildPageController(_selectedIndex, repository, context),
-          buildPageController(_selectedIndex, repository, context),
+          buildPageController(_selectedIndex, repository, context),*/
+FirstTabView(
+        repository: repository,
+      ),
+      SecondTabView(
+        repository: repository,
+      ),
+      ThirdTabView(repository: repository),
+      FourthTabView(repository: repository),
         ]),
       );
     });
