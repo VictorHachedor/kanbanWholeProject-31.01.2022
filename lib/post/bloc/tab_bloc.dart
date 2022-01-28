@@ -3,6 +3,7 @@ import 'dart:core';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../models/post.dart';
 import '../repository/repo.dart';
@@ -19,18 +20,18 @@ class MyTabBloc extends Bloc<MyTabEvent, MyTabState> {
     on<EventSelectedTabChanged>(
       _onEventSelectedTabChanged,
     );
-    _tabStatusSubscription = _repository.status.listen(
-      (status) => add(EventSelectedTabChanged(status)),
-    );
     print('after on<EventSelectedTabChanged>(_onEventSelectedTabChanged)');
   }
 
   final Repository _repository;
-  late StreamSubscription<SelectedTab> _tabStatusSubscription;
+
+  static const rowZero = '?row=0';
+  static const rowOne = '?row=1';
+  static const rowTwo = '?row=2';
+  static const rowThree = '?row=3';
 
   @override
   Future<void> close() {
-    _tabStatusSubscription.cancel();
     _repository.dispose();
     return super.close();
   }
@@ -49,61 +50,55 @@ class MyTabBloc extends Bloc<MyTabEvent, MyTabState> {
       //     return;
       case SelectedTab.tab:
         try {
-          final posts = await _repository.fetchData('?row=0', SelectedTab.tab);
-          print(
-              'from _onEventSelectedTabChanged '
+          final posts = await _repository.fetchData(rowZero, SelectedTab.tab);
+          print('from _onEventSelectedTabChanged '
               'SelectedTab.tab: ${event.status}');
           print('from _onEventSelectedTabChanged SelectedTab.tab: $posts');
-          await _tabStatusSubscription.cancel();
-          print(
-            'from _onEventSelectedTabChanged after'
-            '_tabStatusSubscription.cancel');
+          print('from _onEventSelectedTabChanged after'
+              '_tabStatusSubscription.cancel');
           return emitter(MyTabState.tab(posts));
         } catch (_) {
-          Error error = ArgumentError('error from _onEventSelectedTabChanged ' 
-          'SelectedTab.tab');
+          Error error = ArgumentError('error from _onEventSelectedTabChanged '
+              'SelectedTab.tab');
           throw (error);
         }
       case SelectedTab.secondTab:
         try {
-          final posts = await _repository.fetchData('?row=1', 
-          SelectedTab.secondTab);
+          final posts =
+              await _repository.fetchData(rowOne, SelectedTab.secondTab);
           print(
               'from _onEventSelectedTabChanged SelectedTab.secondTab: $posts');
-          await _tabStatusSubscription.cancel();
-          return (emitter(MyTabState.secondTab(posts)));
+          return emitter(MyTabState.secondTab(posts));
         } catch (_) {
           Error error = ArgumentError('error from _onEventSelectedTabChanged '
-          'SelectedTab.secondTab');
+              'SelectedTab.secondTab');
           throw (error);
         }
       case SelectedTab.thirdTab:
         try {
-          final posts = await _repository.fetchData('?row=2', 
-          SelectedTab.thirdTab);
+          final posts =
+              await _repository.fetchData(rowTwo, SelectedTab.thirdTab);
           print('from _onEventSelectedTabChanged SelectedTab.thirdTab: $posts');
-          await _tabStatusSubscription.cancel();
           return (emitter(MyTabState.thirdTab(posts)));
         } catch (_) {
           Error error = ArgumentError('error from _onEventSelectedTabChanged '
-          'SelectedTab.thirdTab');
+              'SelectedTab.thirdTab');
           throw (error);
         }
       case SelectedTab.fourthTab:
         try {
-          final posts = await _repository.fetchData('?row=3', 
-          SelectedTab.fourthTab);
+          final posts =
+              await _repository.fetchData(rowThree, SelectedTab.fourthTab);
           print(
               'from _onEventSelectedTabChanged SelectedTab.fourthTab: $posts');
-          await _tabStatusSubscription.cancel();
           return (emitter(MyTabState.fourthTab(posts)));
         } catch (_) {
           Error error = ArgumentError('error from _onEventSelectedTabChanged '
-          'SelectedTab.fourthTab');
+              'SelectedTab.fourthTab');
           throw (error);
         }
       default:
-      Error error = ArgumentError('from _onEventSelectedTabChanged default');
+        Error error = ArgumentError('from _onEventSelectedTabChanged default');
         throw (error);
     }
   }

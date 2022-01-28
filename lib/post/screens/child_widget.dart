@@ -5,7 +5,7 @@ import '../bloc/tab_bloc.dart';
 import '../repository/repo.dart';
 import '../screens/post_tile.dart';
 
-class ChildWidget extends StatelessWidget {
+/*class ChildWidget extends StatelessWidget {
   ChildWidget({Key? key, required this.repository}) : super(key: key);
 
   final Repository repository;
@@ -27,19 +27,34 @@ class ChildWidget extends StatelessWidget {
     );
     //);
   }
-}
+}*/
 
 class FirstTabView extends StatefulWidget {
-  const FirstTabView({Key? key}) : super(key: key);
+  const FirstTabView({Key? key, required this.repository}) : super(key: key);
+
+  final Repository repository;
 
   @override
-  _FirstTabViewState createState() => _FirstTabViewState();
+  _FirstTabViewState createState() => _FirstTabViewState(repository);
 }
 
 class _FirstTabViewState extends State<FirstTabView> {
+  _FirstTabViewState(this.repository);
+
+  final Repository repository;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MyTabBloc, MyTabState>(builder: (context, state) {
+    print(
+        'from FirstTabView before context.read<MyTabBloc>'
+        '().add(const EventSelectedTabChanged');
+   // context
+ //       .read<MyTabBloc>()
+  //      .add(const EventSelectedTabChanged(SelectedTab.tab));
+    return BlocProvider(
+      create: (_) => MyTabBloc(repository: repository)
+     ..add(const EventSelectedTabChanged(SelectedTab.tab)),
+      child: 
+        BlocBuilder<MyTabBloc, MyTabState>(builder: (context, state) {
       print('from FirstTabView:  ${state.status}');
       print('from FirstTabView:  ${state.posts}');
       if (state.status == SelectedTab.tab) {
@@ -53,6 +68,7 @@ class _FirstTabViewState extends State<FirstTabView> {
       }
       return const Center(
           child: CircularProgressIndicator(color: Colors.tealAccent));
-    });
+    }
+    ));
   }
 }

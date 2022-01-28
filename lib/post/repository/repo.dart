@@ -15,7 +15,7 @@ class Repository {
 
   final _controller = BehaviorSubject<SelectedTab>();
 
-  Stream<SelectedTab> get status async* {
+  /* Stream<SelectedTab> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
     print(
 'from Stream<SelectedTab> get status async* before "yield SelectedTab.voidd"');
@@ -28,21 +28,20 @@ class Repository {
     print(
         'after yield*_controller.stream value: '
         '${_controller.stream.valueOrNull}');
-  }
+  }*/
 
-Future<List<Post>>fetchData(String row, SelectedTab selectedTab) async {
+  Future<List<Post>> fetchData(String row, SelectedTab selectedTab) async {
     print('from fetchData');
     final dioClient = Dio();
     final api = 'https://trello.backend.tests.nekidaem.ru/api/v1/cards/$row';
     Response response;
     response = await dioClient.get<String>(api,
-        options: Options(headers: <String, dynamic>{
-          'Authorization':
-              'JWT $token'
-        }, responseType: ResponseType.plain)); /* TODO  to add valid token */
+        options: Options(
+            headers: <String, dynamic>{'Authorization': 'JWT $token'},
+            responseType: ResponseType.plain)); /* TODO  to add valid token */
 
     if (response.statusCode == 200) {
-      _controller.add(selectedTab);
+      //  _controller.add(selectedTab);
       print('from fetchData: ${response.statusCode}');
       print('from fetchData:${response.data.runtimeType}');
       print('from fetchData: ${response.data}');
@@ -62,5 +61,4 @@ Future<List<Post>>fetchData(String row, SelectedTab selectedTab) async {
       _controller.close();
     }
   }
-
 }

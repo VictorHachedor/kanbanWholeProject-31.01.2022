@@ -96,11 +96,11 @@ class _MyAppooViewState extends State<MyAppooView>
           ),
         ),
         body: TabBarView(controller: _controller, children: [
-          //TODO one child!
-          buildPageController(_selectedIndex, repository),
-          buildPageController(_selectedIndex, repository),
-          buildPageController(_selectedIndex, repository),
-          buildPageController(_selectedIndex, repository),
+          //TODO enhance!
+          buildPageController(_selectedIndex, repository, context),
+          buildPageController(_selectedIndex, repository, context),
+          buildPageController(_selectedIndex, repository, context),
+          buildPageController(_selectedIndex, repository, context),
         ]),
       );
     });
@@ -108,18 +108,25 @@ class _MyAppooViewState extends State<MyAppooView>
   }
 }
 
-Widget buildPageController(int selectedIndex, Repository repository) {
+Widget buildPageController(
+    int selectedIndex, Repository repository, BuildContext context) {
   switch (selectedIndex) {
     case 0:
-      return ChildWidget(repository: repository);
+      return FirstTabView(
+        repository: repository,
+      );
     case 1:
-      return ChildWidgetTwo(repository: repository);
+      return SecondTabView(
+        repository: repository,
+      );
     case 2:
-      return ChildWidgetThree(repository: repository);
+      return ThirdTabView(repository: repository);
     case 3:
-      return ChildWidgetFour(repository: repository);
+      return FourthTabView(repository: repository);
     default:
-      ChildWidget(repository: repository);
+      FirstTabView(
+        repository: repository,
+      );
   }
   Error error = ArgumentError('smth wrong in buildPageController');
   return throw (error);
