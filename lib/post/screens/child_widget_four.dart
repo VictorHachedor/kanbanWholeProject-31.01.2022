@@ -5,28 +5,6 @@ import '../bloc/tab_bloc.dart';
 import '../repository/repo.dart';
 import '../screens/post_tile.dart';
 
-/*class ChildWidgetFour extends StatelessWidget {
-  ChildWidgetFour({Key? key, required this.repository}) : super(key: key);
-
-  final Repository repository;
-
-  @override
-  Widget build(BuildContext context) {
-    print('from ChildWidgetFour before context.read<MyTabBloc>()'
-    '.add(const EventSelectedTabChangedFromUI');
-    context
-      .read<MyTabBloc>()
-      .add(const EventSelectedTabChanged(SelectedTab.fourthTab));         
-    return RepositoryProvider.value(
-      value: repository,
-      child: BlocProvider(
-        create: (_) => MyTabBloc(repository: repository),
-        child: const FourthTabView(),
-      ),
-    );
-  }
-}*/
-
 class FourthTabView extends StatefulWidget {
   const FourthTabView({ Key? key, required this.repository }) : super(key: key);
 
@@ -44,10 +22,7 @@ class _FourthTabViewState extends State<FourthTabView> {
   @override
   Widget build(BuildContext context) {
         print('from FourthTabView before context.read<MyTabBloc>()'
-    '.add(const EventSelectedTabChanged');
-  //  context
-  //    .read<MyTabBloc>()
-  //    .add(const EventSelectedTabChanged(SelectedTab.fourthTab));  
+    '.add(const EventSelectedTabChanged'); 
     return BlocProvider(
         create: (_) => MyTabBloc(repository: repository)
         ..add(const EventSelectedTabChanged(SelectedTab.fourthTab)),
