@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/authentication/authentication.dart';
+import 'package:flutter_login/post/models/post.dart';
 
 import '../bloc/tab_bloc.dart';
 import '../repository/repo.dart';
@@ -57,6 +58,32 @@ class _MyAppooViewState extends State<MyAppooView>
     _controller.addListener(() {
       setState(() {
         _selectedIndex = _controller.index;
+
+        switch (_selectedIndex) {
+          case 0:
+            context
+                .read<MyTabBloc>()
+                .add(const EventSelectedTabChanged(SelectedTab.tab));
+            return;
+          case 1:
+            context
+                .read<MyTabBloc>()
+                .add(const EventSelectedTabChanged(SelectedTab.secondTab));
+            return;
+          case 2:
+            context
+                .read<MyTabBloc>()
+                .add(const EventSelectedTabChanged(SelectedTab.thirdTab));
+            return;
+          case 3:
+            context
+                .read<MyTabBloc>()
+                .add(const EventSelectedTabChanged(SelectedTab.fourthTab));
+            return;
+          default:
+            Error error = ArgumentError('smth wrong in setState default');
+           throw (error);
+        }
       });
       print('Selected Index: ${_controller.index}');
     });
@@ -71,7 +98,8 @@ class _MyAppooViewState extends State<MyAppooView>
   @override
   Widget build(BuildContext context) {
     print('from MyAppooView');
-    return Builder(builder: (BuildContext context) {
+   // return Builder(builder: (BuildContext context) {
+     return BlocBuilder<MyTabBloc, MyTabState>(builder: (context, state) {
       return Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
@@ -97,10 +125,10 @@ class _MyAppooViewState extends State<MyAppooView>
         ),
         body: TabBarView(controller: _controller, children: [
           //TODO enhance!
-          buildPageController(_selectedIndex, repository, context),
-          buildPageController(_selectedIndex, repository, context),
-          buildPageController(_selectedIndex, repository, context),
-          buildPageController(_selectedIndex, repository, context),
+          buildPageController(_selectedIndex, repository, state.posts),
+          buildPageController(_selectedIndex, repository, state.posts),
+          buildPageController(_selectedIndex, repository, state.posts),
+          buildPageController(_selectedIndex, repository, state.posts),
         ]),
       );
     });
@@ -109,23 +137,26 @@ class _MyAppooViewState extends State<MyAppooView>
 }
 
 Widget buildPageController(
-    int selectedIndex, Repository repository, BuildContext context) {
+    int selectedIndex, Repository repository, List<Post> posts) {
   switch (selectedIndex) {
     case 0:
       return FirstTabView(
         repository: repository,
+        posts: posts,
       );
     case 1:
       return SecondTabView(
         repository: repository,
+        posts: posts,
       );
     case 2:
-      return ThirdTabView(repository: repository);
+      return ThirdTabView(repository: repository, posts: posts);
     case 3:
-      return FourthTabView(repository: repository);
+      return FourthTabView(repository: repository, posts: posts);
     default:
       FirstTabView(
         repository: repository,
+        posts: posts,
       );
   }
   Error error = ArgumentError('smth wrong in buildPageController');

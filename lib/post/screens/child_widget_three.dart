@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_login/post/models/post.dart';
 
 import '../bloc/tab_bloc.dart';
 import '../repository/repo.dart';
@@ -28,18 +29,21 @@ import '../screens/post_tile.dart';
 }*/
 
 class ThirdTabView extends StatefulWidget {
-  const ThirdTabView({Key? key, required this.repository}) : super(key: key);
+  const ThirdTabView({Key? key, required this.repository, required this.posts}) 
+  : super(key: key);
 
    final Repository repository;
+   final List<Post> posts;
 
   @override
-  _ThirdTabViewState createState() => _ThirdTabViewState(repository);
+  _ThirdTabViewState createState() => _ThirdTabViewState(repository, posts);
 }
 
 class _ThirdTabViewState extends State<ThirdTabView> {
-  _ThirdTabViewState(this.repository);
+  _ThirdTabViewState(this.repository, this.posts);
 
   final Repository repository;
+  final List<Post> posts;
 
   @override
   Widget build(BuildContext context) {
@@ -49,23 +53,23 @@ class _ThirdTabViewState extends State<ThirdTabView> {
 //    context
 //        .read<MyTabBloc>()
 //        .add(const EventSelectedTabChanged(SelectedTab.thirdTab)); 
-    return BlocProvider(
+  /*  return BlocProvider(
           create: (_) => MyTabBloc(repository: repository)
           ..add(const EventSelectedTabChanged(SelectedTab.thirdTab)),
           child: BlocBuilder<MyTabBloc, MyTabState>(builder: (context, state) {
       print('from ThirdTabView:  ${state.status}');
       print('from ThirdTabView:  ${state.posts}');
-      if (state.status == SelectedTab.thirdTab) {
+      if (state.status == SelectedTab.thirdTab) {         */
         return ListView.builder(
           itemBuilder: (BuildContext context, int index) {
             print(index);
-            return PostTile(post: state.posts[index]);
+            return posts.isEmpty ? const Center(child: 
+      CircularProgressIndicator(color: Colors.tealAccent)) :
+            PostTile(post: posts[index]);
           },
-          itemCount: state.posts.length,
+          itemCount: posts.length,
         );
-      }
-      return const Center(child: 
-      CircularProgressIndicator(color: Colors.tealAccent));
-    }));
-  }
+  //    return const Center(child: 
+ //     CircularProgressIndicator(color: Colors.tealAccent));
+    }
 }

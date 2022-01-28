@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_login/post/models/post.dart';
 
 import '../bloc/tab_bloc.dart';
 import '../repository/repo.dart';
@@ -30,18 +31,22 @@ import '../screens/post_tile.dart';
 }*/
 
 class FirstTabView extends StatefulWidget {
-  const FirstTabView({Key? key, required this.repository}) : super(key: key);
+  const FirstTabView({Key? key, required this.repository, 
+  required this.posts}) : super(key: key);
 
   final Repository repository;
+  final List<Post> posts;
 
   @override
-  _FirstTabViewState createState() => _FirstTabViewState(repository);
+  _FirstTabViewState createState() => _FirstTabViewState(repository, posts);
 }
 
 class _FirstTabViewState extends State<FirstTabView> {
-  _FirstTabViewState(this.repository);
+  _FirstTabViewState(this.repository, this.posts);
 
   final Repository repository;
+    final List<Post> posts;
+    
   @override
   Widget build(BuildContext context) {
     print(
@@ -50,25 +55,24 @@ class _FirstTabViewState extends State<FirstTabView> {
    // context
  //       .read<MyTabBloc>()
   //      .add(const EventSelectedTabChanged(SelectedTab.tab));
-    return BlocProvider(
+ /*   return BlocProvider(
       create: (_) => MyTabBloc(repository: repository)
      ..add(const EventSelectedTabChanged(SelectedTab.tab)),
       child: 
         BlocBuilder<MyTabBloc, MyTabState>(builder: (context, state) {
       print('from FirstTabView:  ${state.status}');
       print('from FirstTabView:  ${state.posts}');
-      if (state.status == SelectedTab.tab) {
+      if (state.status == SelectedTab.tab) {            */
         return ListView.builder(
           itemBuilder: (BuildContext context, int index) {
             print('index from FirstTabView: $index');
-            return PostTile(post: state.posts[index]);
+            return posts.isEmpty ? const Center(
+          child: CircularProgressIndicator(color: Colors.tealAccent)) :
+            PostTile(post: posts[index]);
           },
-          itemCount: state.posts.length,
+          itemCount: posts.length,
         );
-      }
-      return const Center(
-          child: CircularProgressIndicator(color: Colors.tealAccent));
-    }
-    ));
+//      return const Center(
+  //        child: CircularProgressIndicator(color: Colors.tealAccent));
   }
 }
