@@ -45,9 +45,6 @@ class MyTabBloc extends Bloc<MyTabEvent, MyTabState> {
       case SelectedTab.voidd:
         print('from _onEventSelectedTabChanged case SelectedTab.voidd');
         return;
-      //    case SelectedTab.initial:
-      //    print('from _onEventSelectedTabChanged case SelectedTab.initial');
-      //     return;
       case SelectedTab.tab:
         try {
           final posts = await _repository.fetchData(rowZero, SelectedTab.tab);

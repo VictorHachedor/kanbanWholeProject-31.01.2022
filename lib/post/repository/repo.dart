@@ -15,21 +15,6 @@ class Repository {
 
   final _controller = BehaviorSubject<SelectedTab>();
 
-  /* Stream<SelectedTab> get status async* {
-    await Future<void>.delayed(const Duration(seconds: 1));
-    print(
-'from Stream<SelectedTab> get status async* before "yield SelectedTab.voidd"');
-    yield SelectedTab.voidd;
-    print(
-        'after yield _controller.stream value: ' 
-        '${_controller.stream.valueOrNull}');
-    print('controller.isClosed: ${_controller.isClosed}');
-    yield* _controller.stream;
-    print(
-        'after yield*_controller.stream value: '
-        '${_controller.stream.valueOrNull}');
-  }*/
-
   Future<List<Post>> fetchData(String row, SelectedTab selectedTab) async {
     print('from fetchData');
     final dioClient = Dio();
@@ -38,10 +23,9 @@ class Repository {
     response = await dioClient.get<String>(api,
         options: Options(
             headers: <String, dynamic>{'Authorization': 'JWT $token'},
-            responseType: ResponseType.plain)); /* TODO  to add valid token */
+            responseType: ResponseType.plain));
 
     if (response.statusCode == 200) {
-      //  _controller.add(selectedTab);
       print('from fetchData: ${response.statusCode}');
       print('from fetchData:${response.data.runtimeType}');
       print('from fetchData: ${response.data}');
@@ -57,8 +41,6 @@ class Repository {
   }
 
   void dispose() {
-    if (_controller.hasError) {
-      _controller.close();
-    }
+      _controller.close(); 
   }
 }

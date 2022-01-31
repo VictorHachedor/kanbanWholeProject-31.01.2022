@@ -1,75 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_login/post/models/post.dart';
 
 import '../bloc/tab_bloc.dart';
 import '../repository/repo.dart';
 import '../screens/post_tile.dart';
 
-/*class ChildWidgetThree extends StatelessWidget {
-  ChildWidgetThree({Key? key, required this.repository}) : super(key: key);
+class ThirdTabView extends StatefulWidget {
+  const ThirdTabView({Key? key, required this.repository}) : super(key: key);
 
   final Repository repository;
 
   @override
-  Widget build(BuildContext context) {
-    print(
-        'from ChildWidgetThree before context.read<MyTabBloc>'
-        '().add(const EventSelectedTabChangedFromUI');
-    context
-        .read<MyTabBloc>()
-        .add(const EventSelectedTabChanged(SelectedTab.thirdTab));          
-    return RepositoryProvider.value(
-        value: repository,
-        child: BlocProvider(
-          create: (_) => MyTabBloc(repository: repository),
-          child: const ThirdTabView(),
-        ));
-  }
-}*/
-
-class ThirdTabView extends StatefulWidget {
-  const ThirdTabView({Key? key, required this.repository, required this.posts}) 
-  : super(key: key);
-
-   final Repository repository;
-   final List<Post> posts;
-
-  @override
-  _ThirdTabViewState createState() => _ThirdTabViewState(repository, posts);
+  _ThirdTabViewState createState() => _ThirdTabViewState(repository);
 }
 
 class _ThirdTabViewState extends State<ThirdTabView> {
-  _ThirdTabViewState(this.repository, this.posts);
+  _ThirdTabViewState(this.repository);
 
   final Repository repository;
-  final List<Post> posts;
-
   @override
   Widget build(BuildContext context) {
-        print(
+    print(
         'from ThirdTabView before context.read<MyTabBloc>'
-        '().add(const EventSelectedTabChanged');    
-//    context
-//        .read<MyTabBloc>()
-//        .add(const EventSelectedTabChanged(SelectedTab.thirdTab)); 
-  /*  return BlocProvider(
-          create: (_) => MyTabBloc(repository: repository)
-          ..add(const EventSelectedTabChanged(SelectedTab.thirdTab)),
-          child: BlocBuilder<MyTabBloc, MyTabState>(builder: (context, state) {
+        '().add(const EventSelectedTabChanged');
+    return BlocProvider(
+      create: (_) => MyTabBloc(repository: repository)
+     ..add(const EventSelectedTabChanged(SelectedTab.thirdTab)),
+      child: 
+        BlocBuilder<MyTabBloc, MyTabState>(builder: (context, state) {
       print('from ThirdTabView:  ${state.status}');
       print('from ThirdTabView:  ${state.posts}');
-      if (state.status == SelectedTab.thirdTab) {         */
+      if (state.status == SelectedTab.thirdTab) {
         return ListView.builder(
           itemBuilder: (BuildContext context, int index) {
-            print(index);
-            return posts.isEmpty ? const Center(child: 
-      CircularProgressIndicator(color: Colors.tealAccent)) :
-            PostTile(post: posts[index]);
+            print('index from ThirdTabView: $index');
+            return PostTile(post: state.posts[index]);
           },
-          itemCount: posts.length,
+          itemCount: state.posts.length,
         );
-  //    return const Center(child: 
- //     CircularProgressIndicator(color: Colors.tealAccent));
+      }
+      return const Center(
+          child: CircularProgressIndicator(color: Colors.tealAccent));
     }
+    ));
+  }
 }
