@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login/login/login.dart';
@@ -6,18 +7,31 @@ import 'package:formz/formz.dart';
 class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+     final fieldError = context.select(
+      (LoginBloc loginBloc) => loginBloc.fieldError,
+    );
+    final Widget azdc = Text('Error: ${fieldError?.nonFieldErrors}');
+
+    print('from LoginForm: ${fieldError?.nonFieldErrors}');
+    print('from azdc $azdc');
     return Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         color: Colors.black,
-        child: BlocListener<LoginBloc, LoginState>(
+        child: 
+        BlocListener<LoginBloc, LoginState>(
           listener: (context, state) {
+            print('from LoginForm in listener: ${fieldError?.nonFieldErrors}');
             if (state.status.isSubmissionFailure) {
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(content: Text('Authentication Failure')),
-                );
+                ..showSnackBar(SnackBar(
+                 
+                  content: 
+              fieldError?.nonFieldErrors == null
+                        ? const Text('Proccessing')
+                        : Text('Error: ${fieldError?.nonFieldErrors}')),
+                        );
             }
           },
           child: Align(
@@ -35,6 +49,13 @@ class LoginForm extends StatelessWidget {
           ),
         ));
   }
+}
+
+
+
+Future<Text> textDelay(dynamic error) async {
+  await Future<dynamic>.delayed(const Duration(seconds: 15));
+  return Text('Error: $error');
 }
 
 class _UsernameInput extends StatelessWidget {

@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_login/login/login.dart';
 import 'package:formz/formz.dart';
@@ -18,6 +19,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   final AuthenticationRepository _authenticationRepository;
+  FieldError? fieldError;
 
   void _onUsernameChanged(
     LoginUsernameChanged event,
@@ -53,7 +55,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: state.password.value,
         );
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
-      } catch (_) {
+      } on DioError catch (e) {
+        final dynamic errorMessage = e.response!.data['non_field_errors'][0];
+        fieldError = FieldError(errorMessage);
         emit(state.copyWith(status: FormzStatus.submissionFailure));
       }
     }
