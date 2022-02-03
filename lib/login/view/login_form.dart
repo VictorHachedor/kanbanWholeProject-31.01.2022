@@ -7,55 +7,49 @@ import 'package:formz/formz.dart';
 class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-     final fieldError = context.select(
-      (LoginBloc loginBloc) => loginBloc.fieldError,
+    final dynamic fieldError = context.select<LoginBloc, dynamic>(
+      (LoginBloc loginBloc) => loginBloc.fieldError?.nonFieldErrors,
     );
-    final Widget azdc = Text('Error: ${fieldError?.nonFieldErrors}');
-
-    print('from LoginForm: ${fieldError?.nonFieldErrors}');
-    print('from azdc $azdc');
     return Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         color: Colors.black,
         child: 
-        BlocListener<LoginBloc, LoginState>(
-          listener: (context, state) {
-            print('from LoginForm in listener: ${fieldError?.nonFieldErrors}');
-            if (state.status.isSubmissionFailure) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(SnackBar(
-                 
-                  content: 
-              fieldError?.nonFieldErrors == null
-                        ? const Text('Proccessing')
-                        : Text('Error: ${fieldError?.nonFieldErrors}')),
-                        );
-            }
-          },
-          child: Align(
-            alignment: const Alignment(0, -1 / 3),
+        Align(
+            alignment: const Alignment(0, -2 / 3),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 _UsernameInput(),
                 const Padding(padding: EdgeInsets.all(12)),
-                _PasswordInput(),
-                const Padding(padding: EdgeInsets.all(12)),
+                _PasswordInput(),                
+                const Padding(padding: EdgeInsets.all(12)),                
                 _LoginButton(),
+                const Padding(padding: EdgeInsets.all(6)),  
+                OnFieldError(fieldError),                
               ],
             ),
           ),
-        ));
+        );
   }
 }
 
+class OnFieldError extends StatelessWidget {
+  OnFieldError(this.fieldError,) : super();
+  final dynamic fieldError;
 
-
-Future<Text> textDelay(dynamic error) async {
-  await Future<dynamic>.delayed(const Duration(seconds: 15));
-  return Text('Error: $error');
+  @override
+  Widget build(BuildContext context) {
+    print('from _FieldError');
+    if (fieldError != null) {
+      return Text(
+        'Errorr: $fieldError',
+        style: const TextStyle(color: Colors.red),
+      );
+    }
+    return 
+    const Text('');
+  }
 }
 
 class _UsernameInput extends StatelessWidget {
