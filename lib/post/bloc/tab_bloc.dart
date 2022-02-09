@@ -54,9 +54,9 @@ class MyTabBloc extends Bloc<MyTabEvent, MyTabState> {
           print('from _onEventSelectedTabChanged after'
               '_tabStatusSubscription.cancel');
           return emitter(MyTabState.tab(posts));
-        } catch (_) {
+        } catch (e) {
           Error error = ArgumentError('error from _onEventSelectedTabChanged '
-              'SelectedTab.tab');
+              'SelectedTab.tab: $e');
           throw (error);
         }
       case SelectedTab.secondTab:
@@ -66,9 +66,9 @@ class MyTabBloc extends Bloc<MyTabEvent, MyTabState> {
           print(
               'from _onEventSelectedTabChanged SelectedTab.secondTab: $posts');
           return emitter(MyTabState.secondTab(posts));
-        } catch (_) {
+        } catch (e) {
           Error error = ArgumentError('error from _onEventSelectedTabChanged '
-              'SelectedTab.secondTab');
+              'SelectedTab.secondTab: $e');
           throw (error);
         }
       case SelectedTab.thirdTab:
@@ -77,9 +77,9 @@ class MyTabBloc extends Bloc<MyTabEvent, MyTabState> {
               await _repository.fetchData(rowTwo, SelectedTab.thirdTab);
           print('from _onEventSelectedTabChanged SelectedTab.thirdTab: $posts');
           return (emitter(MyTabState.thirdTab(posts)));
-        } catch (_) {
+        } catch (e) {
           Error error = ArgumentError('error from _onEventSelectedTabChanged '
-              'SelectedTab.thirdTab');
+              'SelectedTab.thirdTab: $e');
           throw (error);
         }
       case SelectedTab.fourthTab:

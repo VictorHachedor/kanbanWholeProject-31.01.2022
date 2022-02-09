@@ -1,6 +1,9 @@
 class Post {
-  Post({required this.id, required this.text});
+  Post({required this.id, required this.text, required this.row});
 
   int id;
-  String text; 
+
+  String text;
+
+  String row;
 }
