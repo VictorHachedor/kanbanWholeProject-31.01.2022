@@ -21,7 +21,7 @@ class _FirstTabViewState extends State<FirstTabView> {
   final Repository repository;
   @override
   Widget build(BuildContext context) {
-    var firstTabPosts = <Post>[];
+//    var firstTabPosts = <Post>[];
     print('from FirstTabView before context.read<MyTabBloc>'
         '().add(const EventSelectedTabChanged');
     return BlocProvider(
@@ -30,22 +30,24 @@ class _FirstTabViewState extends State<FirstTabView> {
         child: BlocBuilder<MyTabBloc, MyTabState>(builder: (context, state) {
           print('from FirstTabView:  ${state.status}');
           print('from FirstTabView:  ${state.posts}');
-          selectedPosts(state, firstTabPosts);
+      //    selectedPosts(state, firstTabPosts);
 
           if (state.status == SelectedTab.tab) {
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
                 print('index from FirstTabView: $index');
                 return PostTile(
-                  post: Post(
-                      id: firstTabPosts[index].id,
-                      row: firstTabPosts[index].row,
-                      text: firstTabPosts[index].text),
-                  //state.posts[index]
+                  post: 
+                  // Post(
+                  //     id: firstTabPosts[index].id,
+                  //     row: firstTabPosts[index].row,
+                  //     text: firstTabPosts[index].text),
+                  state.posts[index]
                 );
               },
-              itemCount: firstTabPosts.length,
-              //state.posts.length,
+              itemCount: 
+              //firstTabPosts.length,
+              state.posts.length,
             );
           }
           return const Center(
@@ -53,11 +55,11 @@ class _FirstTabViewState extends State<FirstTabView> {
         }));
   }
 
-  void selectedPosts(MyTabState state, List<Post> firstTabPosts) {
-    for (var i = 0; i < state.posts.length; i++) {
-      if (state.posts[i].row == '0') {
-        firstTabPosts.add(state.posts[i]);
-      }
-    }
-  }
+  // void selectedPosts(MyTabState state, List<Post> firstTabPosts) {
+  //   for (var i = 0; i < state.posts.length; i++) {
+  //     if (state.posts[i].row == '0') {
+  //       firstTabPosts.add(state.posts[i]);
+  //     }
+  //   }
+  // }
 }

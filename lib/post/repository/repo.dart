@@ -21,6 +21,7 @@ class Repository {
     print('from fetchData');
     var box = Hive.box<dynamic>('bodyData');
     var bodyData = <dynamic>[];
+    var postsList = <Post>[];
     final dioClient = Dio();
     final api = 'https://trello.backend.tests.nekidaem.ru/api/v1/cards/';
     Response response;
@@ -37,10 +38,10 @@ class Repository {
         print('from fetchData: ${response.data}');
         final body = json.decode(response.data.toString()) as List;
         print('RUNTYPE BODY ${body.runtimeType}');
-         await addPosts(body, box);
+        await addPosts(body, box);
       }
-    } catch (e) {
-      print('No Internet: $e');
+    } on DioError catch (e) {
+      print(e);
     }
     print('repo after try block');
     var dataFromHive = box.toMap().values.toList();
@@ -48,34 +49,38 @@ class Repository {
       bodyData.add('empty');
     }
     bodyData = dataFromHive;
-    print(bodyData);
-    return bodyData.map((dynamic json) {
+    var _bodyData = bodyData.map((dynamic json) {
       return Post(
         row: json['row'] as String,
         id: json['id'] as int,
         text: json['text'] as String,
       );
     }).toList();
+    print('_bodyData.length: ${_bodyData.length}');
+    switch (selectedTab) {
+      case SelectedTab.voidd:
+        break;
+      case SelectedTab.tab:
+        return returnBodyData(_bodyData, '0', postsList);
+      case SelectedTab.secondTab:
+        return returnBodyData(_bodyData, '1', postsList);
+      case SelectedTab.thirdTab:
+        return returnBodyData(_bodyData, '2', postsList);
+      case SelectedTab.fourthTab:
+        return returnBodyData(_bodyData, '3', postsList);
+    }
+    throw Exception('repo from fetchData');
   }
 
-List<Post> returnBodyData(List<dynamic> bodyData){
-return bodyData.map((dynamic json) {
-      return Post(
-        row: json['row'] as String,
-        id: json['id'] as int,
-        text: json['text'] as String,
-      );
-    }).toList();
-}
-
-void selectedPosts(List<dynamic> bodyData, int row) {
+  List<Post> returnBodyData(
+      List<Post> bodyData, String row, List<Post> postsList) {
     for (var i = 0; i < bodyData.length; i++) {
-      if (bodyData[i].row == row) {
-        bodyData.add(bodyData[i]);
+      if (bodyData[i].row == '$row') {
+        postsList.add(bodyData[i]);
       }
     }
+    return postsList;
   }
-
 
   Future addPosts(dynamic body, Box box) async {
     print('repo from addPosts');

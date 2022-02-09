@@ -57,7 +57,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         );
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
       } on DioError catch (e) {
-        final dynamic errorMessage = e.response!.data['non_field_errors'][0];
+        final dynamic errorMessage = e.response?.data['non_field_errors'][0] ??
+        'Please check your Internet connection';
+
         fieldError = FieldError(errorMessage);
         emit(state.copyWith(status: FormzStatus.submissionFailure));
       }
